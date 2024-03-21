@@ -414,11 +414,13 @@
       "reader": "Lector"
     },
     "print": {
+      "pageRange": "Rango de páginas",
       "all": "Todo",
       "current": "Página actual",
       "pages": "Páginas",
       "specifyPages": "Especificar páginas",
       "view": "Vista actual",
+      "properties": "Propiedades",
       "pageQuality": "Calidad de impresión",
       "qualityNormal": "Normal",
       "qualityHigh": "Alto",
@@ -1256,6 +1258,7 @@
     }
   },
   "saveModal": {
+    "pageRange": "Rango de páginas",
     "close": "Cerca",
     "saveAs": "Guardar como",
     "general": "General",
@@ -1263,7 +1266,6 @@
     "fileType": "Tipo de archivo",
     "fileLocation": "Ubicación del archivo",
     "browse": "Navegar",
-    "pageRange": "Rango de páginas",
     "all": "Todos",
     "currentView": "Vista actual",
     "currentPage": "Página actual",

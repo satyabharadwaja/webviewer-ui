@@ -414,11 +414,13 @@
       "reader": "Cititor"
     },
     "print": {
+      "pageRange": "Interval de pagini",
       "all": "Toate",
       "current": "Pagina curenta",
       "pages": "Pagini de imprimat",
       "specifyPages": "Specificați Pagini",
       "view": "Vedere actuala",
+      "properties": "Proprietăți",
       "pageQuality": "Calitatea imprimării",
       "qualityNormal": "Normal",
       "qualityHigh": "Înalt",

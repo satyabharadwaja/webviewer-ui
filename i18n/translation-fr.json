@@ -414,11 +414,13 @@
       "reader": "Lecture"
     },
     "print": {
+      "pageRange": "Intervalle de pages",
       "all": "Toutes",
       "current": "Page actuelle",
       "pages": "Pages",
       "specifyPages": "Spécifier les pages",
       "view": "Vue actuelle",
+      "properties": "Propriétés",
       "pageQuality": "Qualité d'impression",
       "qualityNormal": "Ordinaire",
       "qualityHigh": "Haute",

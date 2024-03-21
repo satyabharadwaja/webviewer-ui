@@ -414,11 +414,13 @@
       "reader": "Olvasó"
     },
     "print": {
+      "pageRange": "Oldaltartomány",
       "all": "Összes",
       "current": "Aktuális oldal",
       "pages": "Nyomtatandó oldalak",
       "specifyPages": "Adja meg az oldalakat",
       "view": "Aktuális nézet",
+      "properties": "Tulajdonságok",
       "pageQuality": "Nyomtatási minőség",
       "qualityNormal": "Normál",
       "qualityHigh": "Magas",

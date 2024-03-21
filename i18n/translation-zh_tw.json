@@ -414,11 +414,13 @@
       "reader": "閱讀"
     },
     "print": {
+      "pageRange": "頁面範圍",
       "all": "全部",
       "current": "當前頁面",
       "pages": "頁面",
       "specifyPages": "指定頁面",
       "view": "目前來看",
+      "properties": "特性",
       "pageQuality": "打印質量",
       "qualityNormal": "正常",
       "qualityHigh": "高",

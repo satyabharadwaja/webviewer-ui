@@ -413,11 +413,13 @@
       "reader": "Reader"
     },
     "print": {
+      "pageRange": "Page Range",
       "all": "All",
       "current": "Current Page",
       "pages": "Pages to print",
       "specifyPages": "Specify Pages",
       "view": "Current View",
+      "properties": "Properties",
       "pageQuality": "Print Quality",
       "qualityNormal": "Normal",
       "qualityHigh": "High",

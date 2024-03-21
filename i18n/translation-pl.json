@@ -414,11 +414,13 @@
       "reader": "Czytelnik"
     },
     "print": {
+      "pageRange": "Zakres stron",
       "all": "Wszystko",
       "current": "Bieżąca strona",
       "pages": "Strony do wydrukowania",
       "specifyPages": "Określ strony",
       "view": "Widok",
+      "properties": "Właściwości",
       "pageQuality": "Jakość wydruku",
       "qualityNormal": "Normalna",
       "qualityHigh": "Wysoki",

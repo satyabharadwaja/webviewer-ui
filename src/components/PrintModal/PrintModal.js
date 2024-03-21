@@ -32,7 +32,9 @@ const PrintModal = () => {
     printedNoteDateFormat,
     language,
     watermarkModalOptions,
-    timezone
+    timezone,
+    isAllPagesPrintOptionEnabled,
+    isPagePrintOptionDisabled
   ] = useSelector(
     (state) => [
       selectors.isElementDisabled(state, DataElements.PRINT_MODAL),
@@ -48,12 +50,20 @@ const PrintModal = () => {
       selectors.getPrintedNoteDateFormat(state),
       selectors.getCurrentLanguage(state),
       selectors.getWatermarkModalOptions(state),
-      selectors.getTimezone(state)
+      selectors.getTimezone(state),
+      !selectors.isElementDisabled(state, "allPagesPrintOption"),
+      selectors.isElementDisabled(state, "printRange")
     ],
     shallowEqual
   );
   const dispatch = useDispatch();
   const [t] = useTranslation();
+  const PAGE_RANGES = {
+    ALL: 'all',
+    CURRENT_PAGE: 'currentPage',
+    CURRENT_VIEW: 'currentView',
+    SPECIFY: 'specify'
+  };
 
   const allPages = useRef();
   const currentPageRef = useRef();
@@ -62,7 +72,6 @@ const PrintModal = () => {
   const includeCommentsRef = useRef();
   const currentView = useRef();
   const existingWatermarksRef = useRef();
-
   const [allowWatermarkModal, setAllowWatermarkModal] = useState(false);
   const [count, setCount] = useState(-1);
   const [pagesToPrint, setPagesToPrint] = useState([]);
@@ -71,6 +80,7 @@ const PrintModal = () => {
   const [includeComments, setIncludeComments] = useState(false);
   const [maintainPageOrientation, setMaintainPageOrientation] = useState(false);
   const [isGrayscale, setIsGrayscale] = useState(false);
+  const [pageRange, setPageRange] = useState( isAllPagesPrintOptionEnabled ? PAGE_RANGES.ALL : PAGE_RANGES.CURRENT_PAGE);
 
   useEffect(() => {
     if (defaultPrintOptions) {
@@ -78,7 +88,7 @@ const PrintModal = () => {
       setIncludeComments(defaultPrintOptions.includeComments ?? includeComments);
       setMaintainPageOrientation(defaultPrintOptions.maintainPageOrientation ?? maintainPageOrientation);
     }
-  }, [defaultPrintOptions]);
+  }, [defaultPrintOptions, pageRange]);
 
   useEffect(() => {
     const adjustHeightIfSinglePage = () => {
@@ -142,14 +152,14 @@ const PrintModal = () => {
     };
   }, []);
 
-  const onChange = () => {
+  const onChange = (e) => {
     let pagesToPrint = [];
 
-    if (allPages.current.checked) {
+    if (allPages.current && allPages.current.checked) {
       for (let i = 1; i <= core.getTotalPages(); i++) {
         pagesToPrint.push(i);
       }
-    } else if (currentPageRef.current.checked) {
+    } else if (currentPageRef.current && currentPageRef.current.checked) {
       const pageCount = core.getTotalPages();
 
       // when displaying 2 pages, "Current" should print both of them
@@ -185,11 +195,18 @@ const PrintModal = () => {
           pagesToPrint.push(currentPage);
           break;
       }
-    } else if (customPages.current.checked) {
+    } else if (customPages.current && customPages.current.checked) {
       const customInput = customInputRef.current.value.replace(/\s+/g, '');
       pagesToPrint = getPageArrayFromString(customInput, pageLabels);
-    } else if (currentView.current.checked) {
+    } else if (currentView.current && currentView.current.checked) {
       pagesToPrint = [currentPage];
+    }
+    if (isPagePrintOptionDisabled) {
+      pagesToPrint = [1];
+    }
+
+    if (e != null && e.target != null && e.target.name=='pages' &&  e.target.value != null) {
+      setPageRange(e.target.value);
     }
 
     setPagesToPrint(pagesToPrint);
@@ -273,85 +290,97 @@ const PrintModal = () => {
           <div className="swipe-indicator" />
           <div className="settings">
             <div className="section">
-              <div className="section-label">{`${t('option.print.pages')}:`}</div>
               <form
                 className="settings-form"
                 onChange={onChange}
                 onSubmit={createPagesAndPrint}
               >
-                <Choice
-                  dataElement="allPagesPrintOption"
-                  ref={allPages}
-                  id="all-pages"
-                  name="pages"
-                  radio
-                  label={t('option.print.all')}
-                  defaultChecked
-                  disabled={isPrinting}
-                  center
-                />
-                <Choice
-                  dataElement="currentPagePrintOption"
-                  ref={currentPageRef}
-                  id="current-page"
-                  name="pages"
-                  radio
-                  label={t('option.print.current')}
-                  disabled={isPrinting}
-                  center
-                />
-                <Choice
-                  dataElement="currentViewPrintOption"
-                  ref={currentView}
-                  id="current-view"
-                  name="pages"
-                  radio
-                  label={t('option.print.view')}
-                  disabled={isPrinting}
-                  center
-                />
-                <Choice
-                  dataElement="customPagesPrintOption"
-                  ref={customPages}
-                  id="custom-pages"
-                  name="pages"
-                  className="specify-pages-choice"
-                  radio
-                  label={customPagesLabelElement}
-                  disabled={isPrinting}
-                  center
-                />
-                <Choice
-                  dataElement="commentsPrintOption"
-                  ref={includeCommentsRef}
-                  id="include-comments"
-                  name="comments"
-                  label={t('option.print.includeComments')}
-                  onChange={() => setIncludeComments((prevState) => !prevState)}
-                  disabled={isPrinting}
-                  checked={includeComments}
-                  center
-                />
-                <Choice
-                  dataElement="annotationsPrintOption"
-                  id="include-annotations"
-                  name="annotations"
-                  label={t('option.print.includeAnnotations')}
-                  disabled={isPrinting}
-                  onChange={() => setIncludeAnnotations((prevState) => !prevState)}
-                  checked={includeAnnotations}
-                  center
-                />
-                <Choice
-                  dataElement="grayscalePrintOption"
-                  id="print-grayscale"
-                  name="grayscale"
-                  label={t('option.print.printGrayscale')}
-                  disabled={isPrinting}
-                  onChange={() => setIsGrayscale((prevState) => !prevState)}
-                  checked={isGrayscale}
-                  center
-                />
+                <DataElementWrapper className="section" dataElement={DataElements.PRINT_RANGE}>
+                  <div className='title'>{t('saveModal.pageRange')}</div>
+                  <Choice
+                    dataElement={DataElements.PRINT_ALL_PAGES}
+                    ref={allPages}
+                    id="all-pages"
+                    name="pages"
+                    radio
+                    label={t('option.print.all')}
+                    checked={pageRange === PAGE_RANGES.ALL}
+                    value={PAGE_RANGES.ALL}
+                    disabled={isPrinting}
+                    center
+                  />
+                  <Choice
+                    dataElement={DataElements.PRINT_CURRENT_PAGE}
+                    ref={currentPageRef}
+                    id="current-page"
+                    name="pages"
+                    radio
+                    label={t('option.print.current')}
+                    checked={pageRange === PAGE_RANGES.CURRENT_PAGE}
+                    value={PAGE_RANGES.CURRENT_PAGE}
+                    disabled={isPrinting}
+                    center
+                  />
+                  <Choice
+                    dataElement={DataElements.PRINT_CURRENT_VIEW}
+                    ref={currentView}
+                    id="current-view"
+                    name="pages"
+                    radio
+                    label={t('option.print.view')}
+                    disabled={isPrinting}
+                    checked={pageRange === PAGE_RANGES.CURRENT_VIEW}
+                    value={PAGE_RANGES.CURRENT_VIEW}
+                    center
+                  />
+                  <Choice
+                    dataElement={DataElements.PRINT_CUSTOM_PAGES}
+                    ref={customPages}
+                    id="custom-pages"
+                    name="pages"
+                    className="specify-pages-choice"
+                    radio
+                    label={customPagesLabelElement}
+                    disabled={isPrinting}
+                    checked={pageRange === PAGE_RANGES.SPECIFY}
+                    value={PAGE_RANGES.SPECIFY}
+                    center
+                  />
+                </DataElementWrapper>
+                <DataElementWrapper className="section" dataElement={DataElements.PRINT_PROPERTIES}>
+                    <div className='title'>{t('saveModal.properties')}</div>
+                    <Choice
+                      dataElement={DataElements.PRINT_COMMENTS}
+                      ref={includeCommentsRef}
+                      id="include-comments"
+                      name="comments"
+                      label={t('option.print.includeComments')}
+                      onChange={() => setIncludeComments((prevState) => !prevState)}
+                      disabled={isPrinting}
+                      checked={includeComments}
+                      center
+                    />
+                    <Choice
+                      dataElement={DataElements.PRINT_ANNOTAIONS}
+                      id="include-annotations"
+                      name="annotations"
+                      label={t('option.print.includeAnnotations')}
+                      disabled={isPrinting}
+                      onChange={() => setIncludeAnnotations((prevState) => !prevState)}
+                      checked={includeAnnotations}
+                      center
+                    />
+                    <Choice
+                      dataElement={DataElements.PRINT_GRAYSCALE}
+                      id="print-grayscale"
+                      name="grayscale"
+                      label={t('option.print.printGrayscale')}
+                      disabled={isPrinting}
+                      onChange={() => setIsGrayscale((prevState) => !prevState)}
+                      checked={isGrayscale}
+                      center
+                    />
+                </DataElementWrapper>
               </form>
             </div>
             <DataElementWrapper className="section" dataElement={DataElements.PRINT_QUALITY}>

@@ -414,11 +414,13 @@
       "reader": "리더"
     },
     "print": {
+      "pageRange": "페이지 범위",
       "all": "모두",
       "current": "현재 페이지",
       "pages": "페이지",
       "specifyPages": "페이지 지정",
       "view": "보기",
+      "properties": "속성",
       "pageQuality": "인쇄품질",
       "qualityNormal": "일반",
       "qualityHigh": "최상",

@@ -414,11 +414,13 @@
       "reader": "Читач"
     },
     "print": {
+      "pageRange": "Діапазон сторінок",
       "all": "всі",
       "current": "Поточна сторінка",
       "pages": "Сторінки для друку",
       "specifyPages": "Вкажіть сторінки",
       "view": "Поточний вигляд",
+      "properties": "Властивості",
       "pageQuality": "Якість друку",
       "qualityNormal": "Нормальний",
       "qualityHigh": "Високий",
