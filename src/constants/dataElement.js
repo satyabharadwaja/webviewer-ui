@@ -235,6 +235,24 @@ const DataElements = {
   // Print modal
   PRINT_QUALITY: 'printQuality',
   PRINT_WATERMARK: 'printWatermark',
+  PRINT_RANGE: 'printRange',
+  PRINT_PROPERTIES: 'printProperties',
+  PRINT_ALL_PAGES: 'allPagesPrintOption',
+  PRINT_CURRENT_PAGE: 'currentPagePrintOption',
+  PRINT_CURRENT_VIEW: 'currentViewPrintOption',
+  PRINT_CUSTOM_PAGES: 'customPagesPrintOption',
+  PRINT_COMMENTS: 'commentsPrintOption',
+  PRINT_ANNOTAIONS: 'annotationsPrintOption',
+  PRINT_GRAYSCALE: 'grayscalePrintOption',
+
+  // Save modal
+  SAVE_RANGE: 'saveRange',
+  SAVE_ALL_PAGES: 'allPagesSaveOption',
+  SAVE_CURRENT_PAGE: 'currentPageSaveOption',
+  SAVE_CUSTOM_PAGES: 'customPagesSaveOption',
+  SAVE_PROPERTIES: 'saveProperties',
+  SAVE_COMMENTS: 'commentsSaveOption',
+  SAVE_ANNOTAIONS: 'annotationsSaveOption',  
 
   // Menu overlay items
   CREATE_PORTFOLIO_BUTTON: 'createPortfolioButton',

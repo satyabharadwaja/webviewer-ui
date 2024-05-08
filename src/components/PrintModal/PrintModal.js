@@ -31,7 +31,9 @@ const PrintModal = () => {
     printedNoteDateFormat,
     language,
     watermarkModalOptions,
-    timezone
+    timezone,
+    isAllPagesPrintOptionEnabled,
+    isPagePrintOptionDisabled
   ] = useSelector(
     (state) => [
       selectors.isElementDisabled(state, DataElements.PRINT_MODAL),
@@ -47,12 +49,20 @@ const PrintModal = () => {
       selectors.getPrintedNoteDateFormat(state),
       selectors.getCurrentLanguage(state),
       selectors.getWatermarkModalOptions(state),
-      selectors.getTimezone(state)
+      selectors.getTimezone(state),
+      !selectors.isElementDisabled(state, "allPagesPrintOption"),
+      selectors.isElementDisabled(state, "printRange")
     ],
     shallowEqual
   );
   const dispatch = useDispatch();
   const [t] = useTranslation();
+  const PAGE_RANGES = {
+    ALL: 'all',
+    CURRENT_PAGE: 'currentPage',
+    CURRENT_VIEW: 'currentView',
+    SPECIFY: 'specify'
+  };
 
   const allPages = useRef();
   const currentPageRef = useRef();
@@ -61,7 +71,6 @@ const PrintModal = () => {
   const includeCommentsRef = useRef();
   const currentView = useRef();
   const existingWatermarksRef = useRef();
-
   const [allowWatermarkModal, setAllowWatermarkModal] = useState(false);
   const [count, setCount] = useState(-1);
   const [pagesToPrint, setPagesToPrint] = useState([]);
@@ -70,6 +79,7 @@ const PrintModal = () => {
   const [includeComments, setIncludeComments] = useState(false);
   const [maintainPageOrientation, setMaintainPageOrientation] = useState(false);
   const [isGrayscale, setIsGrayscale] = useState(false);
+  const [pageRange, setPageRange] = useState( isAllPagesPrintOptionEnabled ? PAGE_RANGES.ALL : PAGE_RANGES.CURRENT_PAGE);
 
   useEffect(() => {
     if (defaultPrintOptions) {
@@ -77,7 +87,7 @@ const PrintModal = () => {
       setIncludeComments(defaultPrintOptions.includeComments ?? includeComments);
       setMaintainPageOrientation(defaultPrintOptions.maintainPageOrientation ?? maintainPageOrientation);
     }
-  }, [defaultPrintOptions]);
+  }, [defaultPrintOptions, pageRange]);
 
   const isPrinting = count >= 0;
   const className = getClassName('Modal PrintModal', { isOpen });
@@ -119,7 +129,7 @@ const PrintModal = () => {
     };
   }, []);
 
-  const onChange = () => {
+  const onChange = (e) => {
     let pagesToPrint = [];
 
     if (allPages.current?.checked) {
@@ -167,6 +177,13 @@ const PrintModal = () => {
       pagesToPrint = getPageArrayFromString(customInput, pageLabels);
     } else if (currentView.current?.checked) {
       pagesToPrint = [currentPage];
+    }
+    if (isPagePrintOptionDisabled) {
+      pagesToPrint = [1];
+    }
+
+    if (e != null && e.target != null && e.target.name=='pages' &&  e.target.value != null) {
+      setPageRange(e.target.value);
     }
 
     setPagesToPrint(pagesToPrint);
@@ -251,45 +268,51 @@ const PrintModal = () => {
           <div className="swipe-indicator" />
           <div className="settings">
             <div className="section">
-              <div className="section-label">{`${t('option.print.pages')}:`}</div>
               <form
                 className="settings-form"
                 onChange={onChange}
                 onSubmit={createPagesAndPrint}
               >
+                <DataElementWrapper className="section" dataElement={DataElements.PRINT_RANGE}>
+                  <div className='title'>{t('saveModal.pageRange')}</div>
                 <Choice
-                  dataElement="allPagesPrintOption"
+                    dataElement={DataElements.PRINT_ALL_PAGES}
                   ref={allPages}
                   id="all-pages"
                   name="pages"
                   radio
                   label={t('option.print.all')}
-                  defaultChecked
+                    checked={pageRange === PAGE_RANGES.ALL}
+                    value={PAGE_RANGES.ALL}
                   disabled={isPrinting}
                   center
                 />
                 <Choice
-                  dataElement="currentPagePrintOption"
+                    dataElement={DataElements.PRINT_CURRENT_PAGE}
                   ref={currentPageRef}
                   id="current-page"
                   name="pages"
                   radio
                   label={t('option.print.current')}
+                    checked={pageRange === PAGE_RANGES.CURRENT_PAGE}
+                    value={PAGE_RANGES.CURRENT_PAGE}
                   disabled={isPrinting}
                   center
                 />
                 <Choice
-                  dataElement="currentViewPrintOption"
+                    dataElement={DataElements.PRINT_CURRENT_VIEW}
                   ref={currentView}
                   id="current-view"
                   name="pages"
                   radio
                   label={t('option.print.view')}
                   disabled={isPrinting}
+                    checked={pageRange === PAGE_RANGES.CURRENT_VIEW}
+                    value={PAGE_RANGES.CURRENT_VIEW}
                   center
                 />
                 <Choice
-                  dataElement="customPagesPrintOption"
+                    dataElement={DataElements.PRINT_CUSTOM_PAGES}
                   ref={customPages}
                   id="custom-pages"
                   name="pages"
@@ -297,10 +320,15 @@ const PrintModal = () => {
                   radio
                   label={customPagesLabelElement}
                   disabled={isPrinting}
+                    checked={pageRange === PAGE_RANGES.SPECIFY}
+                    value={PAGE_RANGES.SPECIFY}
                   center
                 />
+                </DataElementWrapper>
+                <DataElementWrapper className="section" dataElement={DataElements.PRINT_PROPERTIES}>
+                    <div className='title'>{t('saveModal.properties')}</div>
                 <Choice
-                  dataElement="commentsPrintOption"
+                      dataElement={DataElements.PRINT_COMMENTS}
                   ref={includeCommentsRef}
                   id="include-comments"
                   name="comments"
@@ -311,7 +339,7 @@ const PrintModal = () => {
                   center
                 />
                 <Choice
-                  dataElement="annotationsPrintOption"
+                      dataElement={DataElements.PRINT_ANNOTAIONS}
                   id="include-annotations"
                   name="annotations"
                   label={t('option.print.includeAnnotations')}
@@ -321,7 +349,7 @@ const PrintModal = () => {
                   center
                 />
                 <Choice
-                  dataElement="grayscalePrintOption"
+                      dataElement={DataElements.PRINT_GRAYSCALE}
                   id="print-grayscale"
                   name="grayscale"
                   label={t('option.print.printGrayscale')}
@@ -330,6 +358,7 @@ const PrintModal = () => {
                   checked={isGrayscale}
                   center
                 />
+                </DataElementWrapper>
               </form>
             </div>
             <DataElementWrapper className="section" dataElement={DataElements.PRINT_QUALITY}>

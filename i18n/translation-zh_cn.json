@@ -413,11 +413,13 @@
       "reader": "阅读"
     },
     "print": {
+      "pageRange": "页面范围",
       "all": "全部",
       "current": "当前页面",
       "pages": "页数",
       "specifyPages": "指定页面",
       "view": "目前来看",
+      "properties": "特性",
       "pageQuality": "打印质量",
       "qualityNormal": "正常",
       "qualityHigh": "高",

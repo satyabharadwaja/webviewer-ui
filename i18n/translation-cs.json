@@ -413,11 +413,13 @@
       "reader": "Čtenář"
     },
     "print": {
+      "pageRange": "Stránkový rozsah",
       "all": "Všechno",
       "current": "Aktuální stránka",
       "pages": "Stránky k tisku",
       "specifyPages": "Zadejte stránky",
       "view": "Aktuální pohled",
+      "properties": "Vlastnosti",
       "pageQuality": "Kvalita tisku",
       "qualityNormal": "Normální",
       "qualityHigh": "Vysoký",

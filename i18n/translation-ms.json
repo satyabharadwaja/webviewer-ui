@@ -413,11 +413,13 @@
       "reader": "Pembaca"
     },
     "print": {
+      "pageRange": "Julat Halaman",
       "all": "Semua",
       "current": "Muka surat ini",
       "pages": "Halaman untuk dicetak",
       "specifyPages": "Tentukan Halaman",
       "view": "Pandangan Semasa",
+      "properties": "Hartanah",
       "pageQuality": "Kualiti Cetakan",
       "qualityNormal": "Biasalah",
       "qualityHigh": "tinggi",

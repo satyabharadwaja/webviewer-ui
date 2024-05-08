@@ -413,11 +413,13 @@
       "reader": "читатель"
     },
     "print": {
+      "pageRange": "Диапазон страниц",
       "all": "Все",
       "current": "Текущая страница",
       "pages": "Страницы",
       "specifyPages": "Укажите страницы",
       "view": "Текущий вид",
+      "properties": "Характеристики",
       "pageQuality": "Качество печати",
       "qualityNormal": "Нормальный",
       "qualityHigh": "Высокая",

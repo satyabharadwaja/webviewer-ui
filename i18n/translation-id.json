@@ -413,11 +413,13 @@
       "reader": "Pembaca"
     },
     "print": {
+      "pageRange": "Rentang Halaman",
       "all": "Semua",
       "current": "Halaman saat ini",
       "pages": "Halaman untuk dicetak",
       "specifyPages": "Tentukan Halaman",
       "view": "Pandangan saat ini",
+      "properties": "Properti",
       "pageQuality": "Kualitas cetak",
       "qualityNormal": "Normal",
       "qualityHigh": "Tinggi",

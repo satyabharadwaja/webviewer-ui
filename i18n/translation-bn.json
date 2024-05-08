@@ -413,11 +413,13 @@
       "reader": "পাঠক"
     },
     "print": {
+      "pageRange": "পৃষ্ঠা ব্যাপ্তি",
       "all": "সব",
       "current": "এই পৃষ্ঠা",
       "pages": "প্রিন্ট করার জন্য পৃষ্ঠা",
       "specifyPages": "পৃষ্ঠাগুলি নির্দিষ্ট করুন",
       "view": "বর্তমান দৃশ্য",
+      "properties": "বৈশিষ্ট্য",
       "pageQuality": "মুদ্রণ মান",
       "qualityNormal": "স্বাভাবিক",
       "qualityHigh": "উচ্চ",

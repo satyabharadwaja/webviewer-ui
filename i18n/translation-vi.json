@@ -413,11 +413,13 @@
       "reader": "Người đọc"
     },
     "print": {
+      "pageRange": "Phạm vi trang",
       "all": "Tất cả",
       "current": "Trang Hiện Tại",
       "pages": "Trang để in",
       "specifyPages": "Chỉ định các trang",
       "view": "Chế Độ Xem Hiện Tại",
+      "properties": "Đặc tính",
       "pageQuality": "Chất Lượng In",
       "qualityNormal": "Bình thường",
       "qualityHigh": "Cao",
