@@ -793,3 +793,13 @@ export const setCustomElementSize = (dataElement, size) => ({
   type: 'SET_CUSTOM_ELEMENT_SIZE',
   payload: { dataElement, size },
 });
+
+export const createStampsValidateFunction = (func) => ({
+  type: 'CREATE_STAMPS_VALIDATE_FUNCTION',
+  payload: { func },
+});
+
+export const stampsValidationStatus = (validationStatus) => ({
+  type: 'STAMPS_VALIDATION_STATUS',
+  payload: { validationStatus },
+});
