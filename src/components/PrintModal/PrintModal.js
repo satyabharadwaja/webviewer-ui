@@ -41,6 +41,8 @@ const PrintModal = ({
   createPagesAndPrint,
   pagesToPrint,
   setPagesToPrint,
+  isAllPagesPrintOptionDisabled,
+  isPageRangePrintOptionDisabled,
   count,
   isPrinting,
   layoutMode,
@@ -70,6 +72,8 @@ const PrintModal = ({
     createPagesAndPrint: PropTypes.func,
     pagesToPrint: PropTypes.array,
     setPagesToPrint: PropTypes.func,
+    isAllPagesPrintOptionDisabled: PropTypes.bool,
+    isPageRangePrintOptionDisabled: PropTypes.bool,   
     count: PropTypes.number,
     isPrinting: PropTypes.bool,
     layoutMode: PropTypes.string,
@@ -79,6 +83,12 @@ const PrintModal = ({
   const dispatch = useDispatch();
   const [t] = useTranslation();
 
+  const pageRanges = {
+    ALL: 'all-pages',
+    CURRENT_PAGE: 'current-page',
+    CURRENT_VIEW: 'current-view',
+    SPECIFY: 'custom-pages'
+  };
   const allPages = useRef();
   const currentPageRef = useRef();
   const customPages = useRef();
@@ -88,6 +98,7 @@ const PrintModal = ({
   const [specifiedPages, setSpecifiedPages] = useState([]);
   const [pageNumberError, setPageNumberError] = useState('');
   const [isCustomPagesChecked, setIsCustomPagesChecked] = useState(false);
+  const [pageRange, setPageRange] = useState( isAllPagesPrintOptionDisabled ? pageRanges.CURRENT_PAGE : pageRanges.ALL);
 
   const customizableUI = useSelector((state) => selectors.getFeatureFlags(state)?.customizableUI);
 
@@ -148,6 +159,9 @@ const PrintModal = ({
     let pagesToPrint = [];
     setIsCurrentView(currentView.current?.checked);
     setIsCustomPagesChecked(customPages.current?.checked);
+    if (allPages.current?.checked) {
+      setPageRange(allPages.current.id);
+    }
     if (allPages.current?.checked || (currentView.current?.checked && embedPrintValid)) {
       for (let i = 1; i <= core.getTotalPages(); i++) {
         pagesToPrint.push(i);
@@ -155,6 +169,7 @@ const PrintModal = ({
     } else if (currentPageRef.current?.checked) {
       const pageCount = core.getTotalPages();
 
+      setPageRange(currentPageRef.current.id);
       // when displaying 2 pages, "Current" should print both of them
       switch (layoutMode) {
         case LayoutMode.FacingCover:
@@ -190,8 +205,13 @@ const PrintModal = ({
       }
     } else if (customPages.current?.checked) {
       pagesToPrint = specifiedPages;
+      setPageRange(customPages.current.id);
     } else if (currentView.current?.checked) {
       pagesToPrint = [currentPage];
+      setPageRange(currentView.current.id);
+    }
+    if (isPageRangePrintOptionDisabled) {
+      pagesToPrint = [1];
     }
 
     setPagesToPrint(pagesToPrint);
@@ -261,7 +281,7 @@ const PrintModal = ({
                   name="pages"
                   radio
                   label={t('option.print.all')}
-                  defaultChecked
+                  checked={pageRange === pageRanges.ALL}
                   disabled={isPrinting}
                   center
                 />
@@ -272,6 +292,7 @@ const PrintModal = ({
                   name="pages"
                   radio
                   label={t('option.print.current')}
+                  checked={pageRange === pageRanges.CURRENT_PAGE}
                   disabled={isPrinting}
                   center
                 />
@@ -282,6 +303,7 @@ const PrintModal = ({
                   name="pages"
                   radio
                   label={t('option.print.view')}
+                  checked={pageRange === pageRanges.CURRENT_VIEW}
                   disabled={isCurrentViewDisabled}
                   center
                   title={t('option.print.printCurrentDisabled')}
@@ -294,6 +316,7 @@ const PrintModal = ({
                   className="specify-pages-choice"
                   radio
                   label={customPagesLabelElement}
+                  checked={pageRange === pageRanges.SPECIFY}
                   disabled={isPrinting}
                   center
                 />

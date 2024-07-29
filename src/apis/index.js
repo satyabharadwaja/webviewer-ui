@@ -309,6 +309,8 @@ import importModularComponents from './importModularComponents';
 import setScaleOverlayPosition from './setScaleOverlayPosition';
 import setPanels from './setPanels';
 import getPanels from './getPanels';
+import createStampsValidateFunction from './createStampsValidateFunction';
+import stampsValidationStatus from './stampsValidationStatus';
 
 export default (store) => {
   const CORE_NAMESPACE = 'Core';
@@ -649,6 +651,8 @@ export default (store) => {
     getDocumentViewer,
     enterMultiViewerMode: enterMultiViewerMode(store),
     exitMultiViewerMode: exitMultiViewerMode(store),
+    createStampsValidateFunction: createStampsValidateFunction(store),
+    stampsValidationStatus: stampsValidationStatus(store),
   };
   const documentViewer = core.getDocumentViewer(1);
 

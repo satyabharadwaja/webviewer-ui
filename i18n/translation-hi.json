@@ -416,11 +416,13 @@
       "reader": "रीडर"
     },
     "print": {
+      "pageRange": "पेज सीमा",
       "all": "सभी",
       "current": "वर्तमान पृष्ठ",
       "pages": "प्रिंट करने के लिए पेज",
       "specifyPages": "पृष्ठ निर्दिष्ट करें",
       "view": "वर्तमान दृश्य",
+      "properties": "गुण",
       "pageQuality": "प्रिंट की गुणवत्ता",
       "qualityNormal": "साधारण",
       "qualityHigh": "उच्च",

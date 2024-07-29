@@ -416,11 +416,13 @@
       "reader": "Läsare"
     },
     "print": {
+      "pageRange": "Sidintervall",
       "all": "Allt",
       "current": "Nuvarande sida",
       "pages": "Sidor att skriva ut",
       "specifyPages": "Ange sidor",
       "view": "Nuvarande åsikt",
+      "properties": "Egenskaper",
       "pageQuality": "Utskriftskvalitet",
       "qualityNormal": "Vanligt",
       "qualityHigh": "Hög",

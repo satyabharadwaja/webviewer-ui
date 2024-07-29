@@ -5,7 +5,8 @@ import actions from 'actions';
 import { useTranslation } from 'react-i18next';
 import DataElements from 'constants/dataElement';
 import Button from 'components/Button';
-import { FocusTrap, Choice, Input } from '@pdftron/webviewer-react-toolkit';
+import { FocusTrap, Input } from '@pdftron/webviewer-react-toolkit';
+import Choice from 'components/Choice/Choice';
 import { Swipeable } from 'react-swipeable';
 import core from 'core';
 import classNames from 'classnames';
@@ -17,6 +18,7 @@ import { workerTypes } from 'constants/types';
 import range from 'lodash/range';
 
 import './SaveModal.scss';
+import DataElementWrapper from '../DataElementWrapper';
 
 const PAGE_RANGES = {
   ALL: 'all',
@@ -37,16 +39,17 @@ const SaveModal = () => {
   const store = useStore();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [isOpen, activeDocumentViewerKey] = useSelector((state) => [
+  const [isOpen, activeDocumentViewerKey, isAllPagesSaveOptionEnabled] = useSelector((state) => [
     selectors.isElementOpen(state, DataElements.SAVE_MODAL),
     selectors.getActiveDocumentViewerKey(state),
+    !selectors.isElementDisabled(state, DataElements.SAVE_ALL_PAGES)
   ]);
 
   const initalFileTypes = [FILE_TYPES.PDF, FILE_TYPES.IMAGE];
   const [fileTypes, setFileTypes] = useState(initalFileTypes);
   const [filename, setFilename] = useState('');
   const [filetype, setFiletype] = useState(fileTypes[0]);
-  const [pageRange, setPageRange] = useState(PAGE_RANGES.ALL);
+  const [pageRange, setPageRange] = useState( isAllPagesSaveOptionEnabled ? PAGE_RANGES.ALL : PAGE_RANGES.CURRENT_PAGE);
   const [specifiedPages, setSpecifiedPages] = useState();
   const [includeAnnotations, setIncludeAnnotations] = useState(true);
   const [includeComments, setIncludeComments] = useState(false);
@@ -251,49 +254,58 @@ const SaveModal = () => {
                 />
               </div>
               {!optionsDisabled && (<>
-                <div className='title'>{t('saveModal.pageRange')}</div>
-                <form className='radio-container' onChange={onPageRangeChange} onSubmit={preventDefault}>
-                  <div className='page-range-column'>
+                <DataElementWrapper className="section" dataElement={DataElements.SAVE_PAGE_RANGE}>
+                  <div className='title'>{t('saveModal.pageRange')}</div>
+                  <form className='radio-container' onChange={onPageRangeChange} onSubmit={preventDefault}>
+                    <div className='page-range-column'>
+                        <Choice
+                          dataElement={DataElements.SAVE_ALL_PAGES}
+                          checked={pageRange === PAGE_RANGES.ALL}
+                          radio
+                          name='page-range-option'
+                          label={t('saveModal.all')}
+                          value={PAGE_RANGES.ALL}
+                        />
+                        <Choice
+                          dataElement={DataElements.SAVE_CURRENT_PAGE}
+                          checked={pageRange === PAGE_RANGES.CURRENT_PAGE}
+                          radio
+                          name='page-range-option'
+                          label={t('saveModal.currentPage')}
+                          value={PAGE_RANGES.CURRENT_PAGE}
+                        />
+                    </div>
+                    <div className='page-range-column custom-page-ranges'>
+                      <Choice
+                        dataElement={DataElements.SAVE_CUSTOM_PAGES}
+                        checked={pageRange === PAGE_RANGES.SPECIFY}
+                        radio
+                        name='page-range-option'
+                        label={customPagesLabelElement}
+                        value={PAGE_RANGES.SPECIFY}
+                      />
+                    </div>
+                  </form>
+                </DataElementWrapper>
+                <DataElementWrapper className="section" dataElement={DataElements.SAVE_PROPERTIES}>
+                  <div className='title'>{t('saveModal.properties')}</div>
+                  <div className='checkbox-container'>
                     <Choice
-                      checked={pageRange === PAGE_RANGES.ALL}
-                      radio
-                      name='page-range-option'
-                      label={t('saveModal.all')}
-                      value={PAGE_RANGES.ALL}
+                      dataElement={DataElements.SAVE_ANNOTATIONS}
+                      checked={includeAnnotations}
+                      name='include-annotation-option'
+                      label={t('saveModal.includeAnnotation')}
+                      onChange={onIncludeAnnotationsChanged}
                     />
                     <Choice
-                      checked={pageRange === PAGE_RANGES.CURRENT_PAGE}
-                      radio
-                      name='page-range-option'
-                      label={t('saveModal.currentPage')}
-                      value={PAGE_RANGES.CURRENT_PAGE}
+                      dataElement={DataElements.SAVE_COMMENTS}
+                      checked={includeComments}
+                      name='include-comment-option'
+                      label={t('saveModal.includeComments')}
+                      onChange={onIncludeCommentsChanged}
                     />
                   </div>
-                  <div className='page-range-column custom-page-ranges'>
-                    <Choice
-                      checked={pageRange === PAGE_RANGES.SPECIFY}
-                      radio
-                      name='page-range-option'
-                      label={customPagesLabelElement}
-                      value={PAGE_RANGES.SPECIFY}
-                    />
-                  </div>
-                </form>
-                <div className='title'>{t('saveModal.properties')}</div>
-                <div className='checkbox-container'>
-                  <Choice
-                    checked={includeAnnotations}
-                    name='include-annotation-option'
-                    label={t('saveModal.includeAnnotation')}
-                    onChange={onIncludeAnnotationsChanged}
-                  />
-                  <Choice
-                    checked={includeComments}
-                    name='include-comment-option'
-                    label={t('saveModal.includeComments')}
-                    onChange={onIncludeCommentsChanged}
-                  />
-                </div>
+                </DataElementWrapper>
               </>)}
             </div>
             <div className='footer'>

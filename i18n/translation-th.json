@@ -416,11 +416,13 @@
       "reader": "ผู้อ่าน"
     },
     "print": {
+      "pageRange": "ช่วงหน้า",
       "all": "ทั้งหมด",
       "current": "หน้าปัจจุบัน",
       "pages": "หน้าที่จะพิมพ์",
       "specifyPages": "ระบุหน้า",
       "view": "มุมมองปัจจุบัน",
+      "properties": "คุณสมบัติ",
       "pageQuality": "คุณภาพการพิมพ์",
       "qualityNormal": "ปกติ",
       "qualityHigh": "สูง",

@@ -30,6 +30,8 @@ const PrintModalContainer = () => {
     language,
     watermarkModalOptions,
     timezone,
+    isAllPagesPrintOptionDisabled,
+    isPageRangePrintOptionDisabled,
     useEmbeddedPrint
   ] = useSelector(
     (state) => [
@@ -46,7 +48,9 @@ const PrintModalContainer = () => {
       selectors.getPrintedNoteDateFormat(state),
       selectors.getCurrentLanguage(state),
       selectors.getWatermarkModalOptions(state),
-      selectors.getTimezone(state),
+      selectors.getTimezone(state), 
+      selectors.isElementDisabled(state, DataElements.PRINT_ALL_PAGES),
+      selectors.isElementDisabled(state, DataElements.PRINT_PAGE_RANGE),
       selectors.isEmbedPrintSupported(state, 'useEmbeddedPrint')
     ],
     shallowEqual
@@ -56,7 +60,7 @@ const PrintModalContainer = () => {
 
   const [allowWatermarkModal, setAllowWatermarkModal] = useState(false);
   const [count, setCount] = useState(-1);
-
+ 
   const [maintainPageOrientation, setMaintainPageOrientation] = useState(false);
   const [pagesToPrint, setPagesToPrint] = useState([]);
   const [isGrayscale, setIsGrayscale] = useState(false);
@@ -224,6 +228,8 @@ const PrintModalContainer = () => {
       createPagesAndPrint={createPagesAndPrint}
       pagesToPrint={pagesToPrint}
       setPagesToPrint={setPagesToPrint}
+      isAllPagesPrintOptionDisabled={isAllPagesPrintOptionDisabled}
+      isPageRangePrintOptionDisabled={isPageRangePrintOptionDisabled}
       count={count}
       isPrinting={isPrinting}
       pageLabels={pageLabels}

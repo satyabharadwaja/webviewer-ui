@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import CustomStampForums from './CustomStampForums';
 import Button from 'components/Button';
 import DataElements from 'constants/dataElement';
+import { getStampsValidateFunction, getValidationStatus, stampsValidationStatus } from 'helpers/stampsValidationHelper';
 
 import './CreateStampModal.scss';
 
@@ -27,6 +28,11 @@ const CustomStampModal = () => {
     selectors.getDateTimeFormats(state),
     selectors.getUserName(state),
   ]);
+  if (getStampsValidateFunction() !== null) {
+    stampsValidationStatus(false);
+  } else {
+    stampsValidationStatus(true);
+  }
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -72,6 +78,14 @@ const CustomStampModal = () => {
 
   const createCustomStamp = async () => {
     core.setToolMode(TOOL_NAME);
+    const handler = getStampsValidateFunction();
+    if (handler !== null) {
+      handler(state);
+      let validationStatus = getValidationStatus();
+      if (!validationStatus) {
+        return;
+      }      
+    } 
     for (const stampTool of stampToolArray) {
       stampTool.addCustomStamp(state);
       const annot = await stampTool.createCustomStampAnnotation(state);

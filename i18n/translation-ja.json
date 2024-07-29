@@ -416,11 +416,13 @@
       "reader": "リーダー"
     },
     "print": {
+      "pageRange": "ページ範囲",
       "all": "すべて",
       "current": "現在のページ",
       "pages": "印刷ページ",
       "specifyPages": "ページを指定",
       "view": "現在のビュー",
+      "properties": "プロパティ",
       "pageQuality": "印刷品質",
       "qualityNormal": "標準",
       "qualityHigh": "きれい",

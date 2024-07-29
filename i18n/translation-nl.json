@@ -416,11 +416,13 @@
       "reader": "Lezer"
     },
     "print": {
+      "pageRange": "Paginabereik",
       "all": "Alles",
       "current": "Huidige pagina",
       "pages": "Pagina's",
       "specifyPages": "Specificeer pagina's",
       "view": "Huidige weergave",
+      "properties": "Eigendommen",  
       "pageQuality": "Print kwaliteit",
       "qualityNormal": "Normaal",
       "qualityHigh": "Hoog",

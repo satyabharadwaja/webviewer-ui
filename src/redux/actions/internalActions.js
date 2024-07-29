@@ -796,3 +796,13 @@ export const setNotesInLeftPanel = (notesInLeftPanel) => ({
   type: 'SET_NOTES_IN_LEFT_PANEL',
   payload: notesInLeftPanel
 });
+
+export const createStampsValidateFunction = (stampsValidationFunction) => ({
+  type: 'CREATE_STAMPS_VALIDATE_FUNCTION',
+  payload: { stampsValidationFunction },
+});
+
+export const stampsValidationStatus = (validationStatus) => ({
+  type: 'STAMPS_VALIDATION_STATUS',
+  payload: { validationStatus },
+});

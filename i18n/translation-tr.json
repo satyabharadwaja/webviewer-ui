@@ -416,11 +416,13 @@
       "reader": "Okuyucu"
     },
     "print": {
+      "pageRange": "Sayfa aralığı",
       "all": "Tüm",
       "current": "Geçerli sayfa",
       "pages": "Yazdırılacak sayfalar",
       "specifyPages": "Sayfaları Belirtin",
       "view": "Mevcut görünüm",
+      "properties": "Özellikleri",
       "pageQuality": "Baskı kalitesi",
       "qualityNormal": "Normal",
       "qualityHigh": "Yüksek",
