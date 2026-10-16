@@ -39,6 +39,7 @@ const SaveModal = () => {
   const isOpen = useSelector((state) => selectors.isElementOpen(state, DataElements.SAVE_MODAL));
   const activeDocumentViewerKey = useSelector((state) => selectors.getActiveDocumentViewerKey(state));
   const isSpreadsheetEditorMode = useSelector(selectors.isSpreadsheetEditorModeEnabled);
+  const isAllPagesSaveOptionDisabled = useSelector((state) => selectors.isElementDisabled(state, DataElements.SAVE_ALL_PAGES));
 
   const initalFileTypes = [FILE_TYPES.PDF, FILE_TYPES.IMAGE];
   const [fileTypes, setFileTypes] = useState(initalFileTypes);
@@ -57,6 +58,12 @@ const SaveModal = () => {
     specifiedPages,
     setSpecifiedPages,
   } = usePageRanges();
+
+  useEffect(() => {
+    if (isOpen && isAllPagesSaveOptionDisabled && pageRange === PAGE_RANGES.ALL) {
+      setPageRange(PAGE_RANGES.CURRENT_PAGE);
+    }
+  }, [isOpen, isAllPagesSaveOptionDisabled, pageRange]);
 
   useEffect(() => {
     const updateFile = async () => {
@@ -238,16 +245,19 @@ const SaveModal = () => {
           </div>
           {!optionsDisabled && (<>
             <div className='title'>{t('saveModal.pageRange')}</div>
-            <form className='radio-container' onChange={onPageRangeChange} onSubmit={preventDefault}>
+            <form className='radio-container' onChange={onPageRangeChange} onSubmit={preventDefault} data-element={DataElements.SAVE_PAGE_RANGE}>
               <div className='page-range-column'>
                 <Choice
+                  dataElement={DataElements.SAVE_ALL_PAGES}
                   checked={pageRange === PAGE_RANGES.ALL}
                   radio
                   name='page-range-option'
                   label={t('saveModal.all')}
                   value={PAGE_RANGES.ALL}
+                  disabled={isAllPagesSaveOptionDisabled}
                 />
                 <Choice
+                  dataElement={DataElements.SAVE_CURRENT_PAGE}
                   checked={pageRange === PAGE_RANGES.CURRENT_PAGE}
                   radio
                   name='page-range-option'
@@ -257,6 +267,7 @@ const SaveModal = () => {
               </div>
               <div className='page-range-column custom-page-ranges'>
                 <Choice
+                  dataElement={DataElements.SAVE_CUSTOM_PAGES}
                   checked={pageRange === PAGE_RANGES.SPECIFY}
                   radio
                   name='page-range-option'
@@ -266,14 +277,16 @@ const SaveModal = () => {
               </div>
             </form>
             <div className='title'>{t('saveModal.properties')}</div>
-            <div className='checkbox-container'>
+            <div className='checkbox-container' data-element={DataElements.SAVE_PROPERTIES}>
               <Choice
+                dataElement={DataElements.SAVE_ANNOTATIONS}
                 checked={includeAnnotations}
                 name='include-annotation-option'
                 label={t('saveModal.includeAnnotation')}
                 onChange={onIncludeAnnotationsChanged}
               />
               <Choice
+                dataElement={DataElements.SAVE_COMMENTS}
                 checked={includeComments}
                 name='include-comment-option'
                 label={t('saveModal.includeComments')}

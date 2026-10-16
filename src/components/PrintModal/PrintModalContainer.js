@@ -32,6 +32,8 @@ const PrintModalContainer = () => {
   const language = useSelector(selectors.getCurrentLanguage);
   const watermarkModalOptions = useSelector(selectors.getWatermarkModalOptions, shallowEqual);
   const timezone = useSelector(selectors.getTimezone);
+  const isAllPagesPrintOptionDisabled = useSelector((state) => selectors.isElementDisabled(state, DataElements.PRINT_ALL_PAGES));
+  const isPageRangePrintOptionDisabled = useSelector((state) => selectors.isElementDisabled(state, DataElements.PRINT_PAGE_RANGE));
   const useEmbeddedPrint = useSelector((state) => selectors.isEmbedPrintSupported(state, 'useEmbeddedPrint'));
 
   const existingWatermarksRef = useRef();
@@ -57,6 +59,12 @@ const PrintModalContainer = () => {
     isCurrentViewDisabled,
     setIsCurrentViewDisabled,
   } = usePageRanges();
+
+  useEffect(() => {
+    if (isOpen && isAllPagesPrintOptionDisabled && pageRange === PAGE_RANGES.ALL) {
+      setPageRange(PAGE_RANGES.CURRENT_PAGE);
+    }
+  }, [isOpen, isAllPagesPrintOptionDisabled, pageRange, setPageRange]);
 
   useEffect(() => {
     if (defaultPrintOptions) {
@@ -246,6 +254,8 @@ const PrintModalContainer = () => {
       isPrinting={isPrinting || pagesAreProcessing}
       layoutMode={layoutMode}
       useEmbeddedPrint={useEmbeddedPrint}
+      isAllPagesPrintOptionDisabled={isAllPagesPrintOptionDisabled}
+      isPageRangePrintOptionDisabled={isPageRangePrintOptionDisabled}
     />
   );
 };

@@ -473,11 +473,13 @@
       "reader": "Leser"
     },
     "print": {
+      "pageRange": "SeitenReichweite",
       "all": "Alle",
       "current": "Aktuelle Seite",
       "pages": "Seiten",
       "specifyPages": "Seiten angeben",
       "view": "Momentane Sicht",
+      "properties": "Eigenschaften",
       "pageQuality": "Druckqualität",
       "qualityNormal": "Normal",
       "qualityHigh": "Hoch",

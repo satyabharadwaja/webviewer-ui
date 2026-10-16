@@ -56,6 +56,8 @@ const PrintModal = ({
   isPrinting,
   layoutMode,
   useEmbeddedPrint,
+  isAllPagesPrintOptionDisabled,
+  isPageRangePrintOptionDisabled,
 }) => {
   const { core } = useCore();
   PrintModal.propTypes = {
@@ -93,6 +95,8 @@ const PrintModal = ({
     isPrinting: PropTypes.bool,
     layoutMode: PropTypes.string,
     useEmbeddedPrint: PropTypes.bool,
+    isAllPagesPrintOptionDisabled: PropTypes.bool,
+    isPageRangePrintOptionDisabled: PropTypes.bool,
   };
 
   const dispatch = useDispatch();
@@ -143,7 +147,9 @@ const PrintModal = ({
 
   const onChange = () => {
     let pagesToPrint = [];
-    if (pageRange === PAGE_RANGES.ALL || (pageRange === PAGE_RANGES.CURRENT_VIEW && embedPrintValid)) {
+    if (isPageRangePrintOptionDisabled) {
+      pagesToPrint = [1];
+    } else if (pageRange === PAGE_RANGES.ALL || (pageRange === PAGE_RANGES.CURRENT_VIEW && embedPrintValid)) {
       for (let i = 1; i <= core.getTotalPages(); i++) {
         pagesToPrint.push(i);
       }
@@ -277,7 +283,7 @@ const PrintModal = ({
                     name="pages"
                     radio
                     label={t('option.print.all')}
-                    disabled={isPrinting}
+                    disabled={isPrinting || isAllPagesPrintOptionDisabled}
                     center
                   />
                   <Choice
@@ -288,7 +294,7 @@ const PrintModal = ({
                     name="pages"
                     radio
                     label={t('option.print.current')}
-                    disabled={isPrinting}
+                    disabled={isPrinting || isPageRangePrintOptionDisabled}
                     center
                   />
                   <Choice
@@ -299,7 +305,7 @@ const PrintModal = ({
                     name="pages"
                     radio
                     label={t('option.print.view')}
-                    disabled={isCurrentViewDisabled}
+                    disabled={isCurrentViewDisabled || isPageRangePrintOptionDisabled}
                     center
                     title={t('option.print.printCurrentDisabled')}
                   />
@@ -312,7 +318,7 @@ const PrintModal = ({
                     className="specify-pages-choice"
                     radio
                     label={customPagesLabelElement}
-                    disabled={isPrinting}
+                    disabled={isPrinting || isPageRangePrintOptionDisabled}
                     center
                   />
                   <Choice

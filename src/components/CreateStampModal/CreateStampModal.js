@@ -10,6 +10,7 @@ import Button from 'components/Button';
 import DataElements from 'constants/dataElement';
 import ModalWrapper from 'components/ModalWrapper';
 import useFocusOnClose from 'hooks/useFocusOnClose';
+import { getStampsValidateFunction, getValidationStatus, stampsValidationStatus } from 'helpers/stampsValidationHelper';
 
 import './CreateStampModal.scss';
 
@@ -32,6 +33,10 @@ const CustomStampModal = () => {
     selectors.getUserName(state),
   ]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    stampsValidationStatus(getStampsValidateFunction() === null);
+  }, [isOpen]);
 
   const updateOverflow = () => {
     const currentModalOverlayElement = customStampModalOverlayRef.current;
@@ -110,6 +115,13 @@ const CustomStampModal = () => {
 
   const createCustomStamp = async () => {
     core.setToolMode(TOOL_NAME);
+    const validationHandler = getStampsValidateFunction();
+    if (validationHandler !== null) {
+      validationHandler(state);
+      if (!getValidationStatus()) {
+        return;
+      }
+    }
     for (const stampTool of stampToolArray) {
       stampTool.addCustomStamp(state);
       const annot = await stampTool.createCustomStampAnnotation(state);

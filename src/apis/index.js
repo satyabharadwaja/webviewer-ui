@@ -292,6 +292,8 @@ import {
 } from 'src/apis/viewOnlyMode';
 import { Shortcuts } from 'helpers/hotkeysUtils';
 import setReaderPageMode from './setReaderPageMode';
+import createStampsValidateFunction from './createStampsValidateFunction';
+import stampsValidationStatus from './stampsValidationStatus';
 
 export default (store, instanceDocViewerKey, instanceI18n, instanceRootNode) => {
   const CORE_NAMESPACE = 'Core';
@@ -614,6 +616,8 @@ export default (store, instanceDocViewerKey, instanceI18n, instanceRootNode) => 
     startTextComparison: startTextComparison(store),
     stopTextComparison,
     closeTooltip,
+    createStampsValidateFunction: createStampsValidateFunction(store),
+    stampsValidationStatus: stampsValidationStatus(store),
   };
   const documentViewerKey = instanceDocViewerKey || store.getState().advanced.documentViewerKey || 1;
   const documentViewer = core.getDocumentViewer(documentViewerKey);
